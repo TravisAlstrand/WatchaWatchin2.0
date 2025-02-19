@@ -8,6 +8,7 @@ console.log("SUPABASE_KEY exists:", !!process.env.SUPABASE_KEY);
 
 import express from "express";
 import morgan from "morgan";
+import userRouter from "./routes/userRoutes.js";
 import { createClient } from "@supabase/supabase-js";
 
 const app = express();
@@ -18,18 +19,12 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 
 // Create a single supabase client for interacting with your database
-const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = createClient(supabaseUrl, supabaseKey);
+
+app.use("/api/users", userRouter);
 
 app.get("/", async (req, res) => {
-  try {
-    const { data, error } = await supabase.from("Users").select("*");
-
-    if (error) throw error;
-
-    res.json(data);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+  res.send("heyooo!");
 });
 
 // Send 404 if no other route matched
